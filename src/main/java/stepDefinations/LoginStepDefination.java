@@ -34,21 +34,59 @@ public class LoginStepDefination {
 		Assert.assertEquals("Cogmento CRM", title);
 	}
 
-	@Then("^User enters username and password and login$")
-	public void user_enters_username_and_password() {
-		WebElement username = driver.findElement(By.name("email"));
-		username.sendKeys("avinmark126@gmail.com");
-		WebElement password = driver.findElement(By.name("password"));
-		password.sendKeys("test@123");
+	@Then("^User enters \"(.*)\" and \"(.*)\"$")	//we use regular expression as \"(.*)\"
+	public void user_enters_username_and_password(String username, String password) {
+	driver.findElement(By.name("email")).sendKeys(username);
+	driver.findElement(By.name("password")).sendKeys(password);
+	}
+	
+	@Then("^User clicks on Login button$")
+	public void user_clicks_on_Login_button() throws InterruptedException  {
 		WebElement loginBtn = driver.findElement(By.xpath("//div[contains(text(),'Login')]"));
 		loginBtn.click();
+		Thread.sleep(10000);
 	}
+
 
 	@Then("^User is on homepage$")
 	public void user_is_on_homepage()  {
-		String title = driver.getTitle();
-		System.out.println(title);
-		Assert.assertEquals("Cogmento CRM", title);
+		WebElement homeLnk = driver.findElement(By.xpath("//span[contains(text(),'Home')]"));
+		if(homeLnk.isDisplayed()) {
+			System.out.println("User is successfuly logged in");
+		}else {
+			System.out.println("Please enter valid credentials to login");
+		}	
+	}
+	
+	//Contacts page scenarios
+	@Then("^User moves to contacts page$")
+	public void user_moves_to_contacts_page()  {
+	WebElement contactsLnk = driver.findElement(By.xpath("//span[contains(text(), 'Contacts')]"));
+	contactsLnk.click();
+	}
+
+	@Then("^User clicks on New button$")
+	public void user_clicks_on_New_button() throws InterruptedException  {
+	WebElement newBtn = driver.findElement(By.xpath("//button[contains(text(), 'New')]"));
+	newBtn.click();
+	Thread.sleep(5000);
+	}
+	
+	@Then("^User enters contact details as \"([^\"]*)\" and \"([^\"]*)\"$")
+	public void user_enters_contact_details_as_and(String firstName, String lastName)  {
+	driver.findElement(By.name("first_name")).sendKeys(firstName);
+	driver.findElement(By.name("last_name")).sendKeys(lastName);
+	}
+
+	@Then("^User clicks on Save button$")
+	public void user_clicks_on_Save_button()  {
+	WebElement saveBtn = driver.findElement(By.xpath("//button[contains(text(), 'Save')]"));
+	saveBtn.click();
+	}
+
+	@Then("^Close the browser$")
+	public void closeBrowser() {
+	driver.quit();
 	}
 
 	
